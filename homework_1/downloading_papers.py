@@ -56,7 +56,7 @@ def main():
     input_link = input("Inserisci l'URL da cui estrarre i paper: ")
     
     # Directory dove salvare i file HTML
-    output_dir = "../progetto_idd/project_iid/homework_1/sources"
+    output_dir = "../progetto_idd/project_idd/homework_1/sources"
     os.makedirs(output_dir, exist_ok=True)
     
     # Estrai i paper
