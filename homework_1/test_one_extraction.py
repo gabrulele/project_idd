@@ -1,8 +1,10 @@
+import os
 import requests
 from lxml import html
 import lxml.etree as etree
 import string
 from bs4 import BeautifulSoup
+import json
 
 
 def estrai_con_xpath(file_path, xpath_query):
@@ -18,27 +20,41 @@ def estrai_con_xpath(file_path, xpath_query):
         print(f"Errore nell'elaborazione del file {file_path}:", e)
     
 
-file_path = "project_idd/homework_1/sources/arXiv2409.13535.html"
+#file_path = "project_idd/homework_1/sources/arXiv2409.13535.html"
+file_path = "homework_1/sources/arXiv2410.00469.html"
+
+# Dizionario che conterrà i dati finali da convertire in JSON
+json_data = {}
 
 # Lista di id per accedere poi ad ogni tables
 
 xpath_query_id_tables = "//table/@id"  
-   
-id_tables = estrai_con_xpath(file_path, xpath_query_id_tables)
 
-if id_tables:
+# Recuperiamo le id_tables e provvediamo a filtrarla, lasciando solo quelle effettive
+id_tables = estrai_con_xpath(file_path, xpath_query_id_tables)
+clean_id_tables = [elemento for elemento in id_tables if "T" in elemento]
+
+if clean_id_tables:
+
 
     #Scorriamo la lista id_tables per accedere ad ogni id delle tables
-    for id in id_tables:
+    for id in clean_id_tables:
+
+        # Dati per la tabella corrente
+        table_data = {}
+
         table = estrai_con_xpath(file_path,"//table[@id='" + id + "']")
-        for elem in table:
-            print(etree.tostring(elem, pretty_print=True).decode())
+        #for elem in table:
+            #print(etree.tostring(elem, pretty_print=True).decode())
+        html_table = "".join([etree.tostring(elem, pretty_print=True).decode() for elem in table])
+        table_data["table"] = html_table
 
         # Tramite l'id della table i-esima prendiamo la caption associata
         xpath_query_caption = "//table[@id='"+ id + "']/ancestor::figure/figcaption/text() | //table[@id='"+ id + "']/ancestor::figure/figcaption//*/text()"
         caption_list = estrai_con_xpath(file_path,xpath_query_caption)
         caption = " ".join(caption_list)
-        print(caption)
+        table_data["caption"]=caption
+        #print(caption)
         print("\n")
 
         # Tramite l'id della table i-esima prendiamo tutti i footnotes associati alla table e caption
@@ -50,11 +66,12 @@ if id_tables:
         # Usiamo il metodo split per dividere la stringa su "...bib.bib..."
         for href in href_cites:
             num_footnote = href.split("bib.bib")[-1]  # Prendiamo il numero del footnote
-            xpath_query_footnote = "//li[@id='bib.bib"+ num_footnote + "']/*/text()"
+            xpath_query_footnote = "//li[@id='bib.bib"+ num_footnote + "']/*/text() | //li[@id='bib.bib"+ num_footnote + "']//*/text()"
             footnote_list = estrai_con_xpath(file_path,xpath_query_footnote)
             footnote = " ".join(footnote_list)
             footnote_table_list.append(footnote)
-        print(footnote_table_list)
+        table_data["footnotes"] = footnote_table_list
+        #print(footnote_table_list)
         print("\n")
 
         # Tramite l'id della table recuperiamo l'id della figure ancestor per ottenere i paragraphs
@@ -72,8 +89,22 @@ if id_tables:
 
                 paragraph_list.append(text_content)
 
-            print(paragraph_list)
+            table_data["references"] = paragraph_list
+            #print(paragraph_list)
             print("\n\n")
+        
+        # Aggiungi il risultato al dizionario principale con l'ID della tabella come chiave
+        json_data[id] = table_data
+
+    
+output_dir = "homework_1/extraction"
+
+# Percorso completo per il file JSON
+output_file = os.path.join(output_dir, "testOne.json")
+
+# Scrivi il risultato in un file JSON
+with open(output_file, 'w', encoding='utf-8') as json_file:
+    json.dump(json_data, json_file, ensure_ascii=False, indent=4)
 
     
         
