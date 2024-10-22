@@ -97,7 +97,7 @@ if clean_id_tables:
         json_data[id] = table_data
 
     
-output_dir = "homework_1/extraction"
+output_dir = "homework_1/test"
 
 # Percorso completo per il file JSON
 output_file = os.path.join(output_dir, "testOne.json")
