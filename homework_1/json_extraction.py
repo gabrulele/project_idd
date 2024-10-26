@@ -52,7 +52,7 @@ def estrai_json(file_path):
 
             # Tramite l'id della table i-esima prendiamo tutti i footnotes associati alla table e caption
             xpath_query_href_cite = "//table[@id='"+ id + "']/ancestor::figure//cite//@href"
-            href_cites = estrai_con_xpath(file_path,xpath_query_href_cite)
+            href_cites = estrai_con_xpath(file_path, xpath_query_href_cite)
 
             # Lista unica per i molteplici footnote cada table
             footnote_table_list = []
@@ -61,7 +61,7 @@ def estrai_json(file_path):
             for href in href_cites:
                 num_footnote = href.split("bib.bib")[-1]
                 xpath_query_footnote = "//li[@id='bib.bib"+ num_footnote + "']/*/text() | //li[@id='bib.bib"+ num_footnote + "']//*/text()"
-                footnote_list = estrai_con_xpath(file_path,xpath_query_footnote)
+                footnote_list = estrai_con_xpath(file_path, xpath_query_footnote)
                 footnote = " ".join(footnote_list)
                 footnote_table_list.append(footnote)
             table_data["footnotes"] = footnote_table_list

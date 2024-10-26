@@ -2,11 +2,11 @@
  ##Data Engineering project topic
 The research topic is about Image Segmentation, the papers are mainly focused on image segmentation techniques to partition images into meaningful regions for analysis and processing
 
- ##Project overview
+## Project overview
 This web data extraction project presented has enabled the automation of the extraction and transformation of structured information, such as tables and captions and other informations, from scientific papers on arXiv. By employing parsing techniques and analyzing the HTML files of the papers, we converted each document into a JSON format, with the extracted data organized in a clear and structured manner. 
 This process simplifies access to and management of complex information, facilitating large-scale automated research and analysis, with a positive impact on the efficiency of data mining and machine learning processes in various contexts.
 
- ##Example output
+## Example output
 {
   "paper_id": "1234.56789",
   "tables": [
@@ -20,7 +20,7 @@ This process simplifies access to and management of complex information, facilit
   "footnotes": [...]
 }
 
- ##Urls of arXiv: 
+**Urls of arXiv**: 
 https://arxiv.org/html/2409.05681
 https://arxiv.org/html/2409.05697
 https://arxiv.org/html/2409.05875

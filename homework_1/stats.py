@@ -2,6 +2,7 @@ import os
 import json
 
 def analizza_tutti_json(cartella_json):
+    
     # Inizializza variabili per le statistiche globali
     totale_tabelle = 0
     totale_references = 0

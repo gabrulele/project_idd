@@ -8,6 +8,7 @@ import json
 
 
 def estrai_con_xpath(file_path, xpath_query):
+
     # Carica il contenuto come una pagina HTML parsata
     try:
          with open(file_path, 'r', encoding='utf-8') as file:
@@ -27,7 +28,6 @@ file_path = "homework_1/sources/arXiv2410.00469.html"
 json_data = {}
 
 # Lista di id per accedere poi ad ogni tables
-
 xpath_query_id_tables = "//table/@id"  
 
 # Recuperiamo le id_tables e provvediamo a filtrarla, lasciando solo quelle effettive
@@ -36,7 +36,6 @@ clean_id_tables = [elemento for elemento in id_tables if "T" in elemento]
 
 if clean_id_tables:
 
-
     #Scorriamo la lista id_tables per accedere ad ogni id delle tables
     for id in clean_id_tables:
 
@@ -44,8 +43,6 @@ if clean_id_tables:
         table_data = {}
 
         table = estrai_con_xpath(file_path,"//table[@id='" + id + "']")
-        #for elem in table:
-            #print(etree.tostring(elem, pretty_print=True).decode())
         html_table = "".join([etree.tostring(elem, pretty_print=True).decode() for elem in table])
         table_data["table"] = html_table
 
@@ -54,7 +51,6 @@ if clean_id_tables:
         caption_list = estrai_con_xpath(file_path,xpath_query_caption)
         caption = " ".join(caption_list)
         table_data["caption"]=caption
-        #print(caption)
         print("\n")
 
         # Tramite l'id della table i-esima prendiamo tutti i footnotes associati alla table e caption
@@ -71,7 +67,6 @@ if clean_id_tables:
             footnote = " ".join(footnote_list)
             footnote_table_list.append(footnote)
         table_data["footnotes"] = footnote_table_list
-        #print(footnote_table_list)
         print("\n")
 
         # Tramite l'id della table recuperiamo l'id della figure ancestor per ottenere i paragraphs
@@ -84,13 +79,13 @@ if clean_id_tables:
             paragraph_list = []
 
             for html_p in paragraph_htmls:
+                
                 # Usa lxml per trovare l'elemento e ottenere solo il testo
                 text_content = html_p.text_content() 
 
                 paragraph_list.append(text_content)
 
             table_data["references"] = paragraph_list
-            #print(paragraph_list)
             print("\n\n")
         
         # Aggiungi il risultato al dizionario principale con l'ID della tabella come chiave

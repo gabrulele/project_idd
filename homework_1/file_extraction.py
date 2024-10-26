@@ -12,8 +12,10 @@ def processa_file_html():
 
     # Itera su ogni file .html nella cartella e applica le operazioni di estrazione
     for filename in os.listdir(directory_path):
+
         # Costruisce il percorso completo del file
         file_path = os.path.join(directory_path, filename)
+        
         # Processa solo i file HTML
         if os.path.isfile(file_path):
             estrai_json(file_path)

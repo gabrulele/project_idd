@@ -45,13 +45,14 @@ def extract_papers_from_link(link, max_results=600):
     for a in soup.find_all('a', href=True):
         href = a['href']
         if '/abs/' in href:  # Filtra solo i link ai paper
+
             # Sostituisce /abs/ con /html/
             html_link = href.replace('/abs/', '/html/')
             paper_links.append((a.text.strip(), html_link))  # Aggiungi il titolo e il link
-
     return paper_links[:max_results]  # Restituisce solo i primi max_results
 
 def main():
+    
     # URL di partenza fornito
     input_link = input("Inserisci l'URL da cui estrarre i paper: ")
     
